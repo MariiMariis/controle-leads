@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="~{fragments :: headerConfig}"></div>
+    <title>Lista de Leads</title>
+</head>
+<body>
+    <nav th:replace="~{fragments :: navbar}"></nav>
+    <div class="main-container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Gestão de Leads</h2>
+            <a th:href="@{/leads/novo}" class="btn btn-custom">+ Adicionar Lead</a>
+        </div>
+
+        <div th:if="${mensagemSucesso}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <span th:text="${mensagemSucesso}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                Leads Cadastrados
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>E-mail</th>
+                                <th>Telefone</th>
+                                <th>Status</th>
+                                <th>Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="lead : ${leads}">
+                                <td th:text="${lead.nome}"></td>
+                                <td th:text="${lead.email}"></td>
+                                <td th:text="${lead.telefone}"></td>
+                                <td>
+                                    <span th:class="'badge badge-' + ${#strings.toLowerCase(lead.status)}" th:text="${lead.status.descricao}"></span>
+                                </td>
+                                <td>
+                                    <a th:href="@{/leads/{id}/editar(id=${lead.id})}" class="btn btn-sm btn-outline-primary">Editar</a>
+                                    <a th:href="@{/leads/{id}/excluir(id=${lead.id})}" class="btn btn-sm btn-outline-danger ms-1" onclick="return confirm('Tem certeza que deseja excluir este lead?');">Excluir</a>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(leads)}">
+                                <td colspan="5" class="text-center text-muted">Nenhum lead encontrado.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div th:replace="~{fragments :: scripts}"></div>
+</body>
+</html>
